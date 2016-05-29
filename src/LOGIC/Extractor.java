@@ -165,7 +165,7 @@ public class Extractor {
         {
             cell = cellIterator.next();
             String nombreRuta = cell.getStringCellValue();
-            //transformer.crearParada(nombreRuta);
+            transformer.crearParada(nombreRuta);
             nombreRutas.add(cell.getStringCellValue());
         }
         
@@ -186,7 +186,7 @@ public class Extractor {
                     //System.out.println("Demanda " + cell.getNumericCellValue());
                     destino = nombreRutas.get(cant_celdas);
                     double valorCapturado = cell.getNumericCellValue();
-                    //transformer.crearDemanda(bookName,sheetName,origen, destino, valorCapturado);
+                    transformer.crearDemanda(bookName,sheetName,origen, destino, valorCapturado);
                 }
                 else if(cell.getCellType()==Cell.CELL_TYPE_STRING)
                 {

@@ -26,9 +26,7 @@ public class Transformer {
         this.log = log;
         try {
             loader.cargarTiempoFecha();
-        } catch (SQLException ex) {
-            Logger.getLogger(Transformer.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (SQLException | IOException ex) {
             Logger.getLogger(Transformer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -51,8 +49,6 @@ public class Transformer {
     void crearParada(String nombreParada) {
 
         String tipoParada = "";
-        
-        int idParada = 0;
 
         if (nombreParada.matches("^.*\\d.*$")) {
             tipoParada = "RUTA";
@@ -60,7 +56,7 @@ public class Transformer {
             tipoParada = "ESTACION";
         }
 
-        Parada nuevaParada = new Parada(idParada, nombreParada, tipoParada);
+        Parada nuevaParada = new Parada(nombreParada, nombreParada, tipoParada);
 
         loader.cargarParada(nuevaParada);
 

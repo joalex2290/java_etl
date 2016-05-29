@@ -11,11 +11,11 @@ package DATA;
  */
 public class Parada {
 
-    private int IdParada;
+    private String IdParada;
     private String Nombre;
     private String Tipo;
 
-    public Parada(int IdParada, String Nombre, String Tipo) {
+    public Parada(String IdParada, String Nombre, String Tipo) {
 
         this.IdParada = IdParada;
         this.Nombre = Nombre;
@@ -23,11 +23,11 @@ public class Parada {
 
     }
 
-    public int getIdParada() {
+    public String getIdParada() {
         return IdParada;
     }
 
-    public void setIdParada(int IdParada) {
+    public void setIdParada(String IdParada) {
         this.IdParada = IdParada;
     }
 

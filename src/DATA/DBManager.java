@@ -46,8 +46,8 @@ public class DBManager {
             System.out.println("No se pudo conectar con la bd.");
         }
     }
-    
-    public Connection getConexion(){
+
+    public Connection getConexion() {
         return this.conexion;
     }
 
@@ -82,13 +82,18 @@ public class DBManager {
             return resultado;
         } catch (SQLException e) {
             System.out.println(e);
-        } catch (Exception e) {
-            System.out.println(e);
         }
         return 0;
     }
 
-    public int selectQuery(String sql) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ResultSet selectQuery(String sql) {
+        try {
+            Statement sentencia = conexion.createStatement();
+            ResultSet resultado = sentencia.executeQuery(sql);
+            return resultado;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
     }
 }

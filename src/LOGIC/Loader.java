@@ -11,7 +11,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTextArea;
 
 /**
@@ -32,20 +35,38 @@ public class Loader {
 
     public int consultarFecha(String fecha) {
         String sql;
-        sql = "SELECT id_fecha FROM fecha WHERE fecha = '" + fecha + "'";
-        return dbmanager.selectQuery(sql);   
+        sql = "SELECT id_fecha FROM fecha WHERE fecha_formateada = '" + fecha + "'";
+        ResultSet res = dbmanager.selectQuery(sql);
+        try {   
+            return res.getInt("id_fecha");
+        } catch (SQLException ex) {
+            Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
     }
 
     public int consultarTiempo(String hora) {
         String sql;
-        sql = "SELECT id_tiempo FROM tiempo WHERE hora_origen = '" + hora + "'";
-        return dbmanager.selectQuery(sql);   
+        sql = "SELECT id_tiempo FROM tiempo WHERE franja = '" + hora + "'";
+        ResultSet res = dbmanager.selectQuery(sql);
+        try {   
+            return res.getInt("id_tiempo");
+        } catch (SQLException ex) {
+            Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
     }
 
     public int consultarParada(String parada) {
         String sql;
-        sql = "SELECT id_parada FROM parada WHERE nombre_parada = '" + parada + "'";
-        return dbmanager.selectQuery(sql);   
+        sql = "SELECT id_parada FROM parada WHERE nombre = '" + parada + "'";
+        ResultSet res = dbmanager.selectQuery(sql);
+        try {   
+            return res.getInt("id_parada");
+        } catch (SQLException ex) {
+            Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;   
     }
 
     public void cargarTiempoFecha() throws SQLException, FileNotFoundException, IOException {
@@ -60,9 +81,8 @@ public class Loader {
 
     public void cargarParada(Parada parada) {
         String sql;
-        sql = "INSERT INTO paradas VALUES ('"
-                + parada.getIdParada() + "', '" + parada.getNombre() + "', '"
-                + parada.getTipo() + ")";
+        sql = "INSERT INTO parada (id,nombre,tipo) VALUES ('" + parada.getIdParada() + 
+                "','" + parada.getNombre() + "','" + parada.getTipo() + "');";
 
         dbmanager.insertQuery(sql);
     }
@@ -70,14 +90,9 @@ public class Loader {
     void cargarDemanda(Demanda demanda) {
 
         String sql;
-        sql = "INSERT INTO demanda VALUES ('"
-                + demanda.getFechaKey() + "', '" + demanda.getTiempoKey() + "', '"
-                + "', '" + demanda.getOrigenKey() + "', '"
-                + "', '" + demanda.getDestinoKey() + "', '"
-                + demanda.getCantPasajeros() + ")";
-
+        sql = "INSERT INTO demanda (id_fecha,id_tiempo,id_origen,id_destino,cantidad_pasajeros) VALUES (" +
+                demanda.getFechaKey() + "," + demanda.getTiempoKey() + "," + demanda.getOrigenKey() + 
+                "," + demanda.getDestinoKey() + "," + demanda.getCantPasajeros() + ");";
         dbmanager.insertQuery(sql);
-
     }
-
 }
