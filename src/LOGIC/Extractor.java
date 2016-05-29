@@ -43,10 +43,10 @@ public class Extractor {
         {
             try
             {
-                FileInputStream excelFile = new FileInputStream(new File(folderPath));
-                XSSFWorkbook book = new XSSFWorkbook(excelFile);
                 System.out.println("archivo desde file " + folderPath);
-                book.getProperties().getCoreProperties().setTitle(folderPath);
+                File excelFile = new File(folderPath);
+                XSSFWorkbook book = new XSSFWorkbook(excelFile);
+                book.getProperties().getCoreProperties().setTitle(excelFile.getName());
                 this.books.add(book);
             }
             catch(Exception e)
@@ -97,8 +97,7 @@ public class Extractor {
 
             for(int i=0;i<files.length;i++)
             {
-                FileInputStream excelFile = new FileInputStream(files[i]);
-                XSSFWorkbook book = new XSSFWorkbook(excelFile);
+                XSSFWorkbook book = new XSSFWorkbook(files[i]);
                 System.out.println("archivo desde file " + (i+1) + " " + files[i].getName());
                 book.getProperties().getCoreProperties().setTitle(files[i].getName());
                 this.books.add(book);                
@@ -148,7 +147,7 @@ public class Extractor {
         String destino = "";
         String sheetName = sheet.getSheetName();
         
-        ArrayList<String> nombreRutas = new ArrayList();
+        ArrayList<String> nombreDestinos = new ArrayList();
         
         Iterator<Row> rowIterator = sheet.iterator();
         
@@ -159,14 +158,13 @@ public class Extractor {
         Iterator<Cell> cellIterator = firstRow.cellIterator();
         Cell cell;
         
-        //Recorrer todas las celdas a partir de la numero 2.
-        cellIterator.next();
+        //Recorrer todas las celdas de la primera fila para obtener nombre de rutas destino
+        //cellIterator.next();
         while(cellIterator.hasNext())
         {
             cell = cellIterator.next();
             String nombreRuta = cell.getStringCellValue();
-            //transformer.crearParada(nombreRuta);
-            nombreRutas.add(cell.getStringCellValue());
+            nombreDestinos.add(nombreRuta);            
         }
         
         //Recorrer todas las filas de la hoja, a partir de la segunda fila
@@ -184,14 +182,23 @@ public class Extractor {
                 if(cell.getCellType()==Cell.CELL_TYPE_NUMERIC)
                 {
                     //System.out.println("Demanda " + cell.getNumericCellValue());
-                    destino = nombreRutas.get(cant_celdas);
+                    destino = nombreDestinos.get(cant_celdas);
                     double valorCapturado = cell.getNumericCellValue();
-                    //transformer.crearDemanda(bookName,sheetName,origen, destino, valorCapturado);
+                    
+                    if(valorCapturado!= 0.0){
+                        transformer.crearParada(destino);
+                        transformer.crearDemanda(bookName, sheetName, origen, destino, valorCapturado);
+                    }
+                    
                 }
                 else if(cell.getCellType()==Cell.CELL_TYPE_STRING)
                 {
                     //System.out.println("Destino " + cell.getStringCellValue());
-                    if(cant_celdas==0) origen = cell.getStringCellValue();
+                    if(cant_celdas==0)
+                    {
+                        origen = cell.getStringCellValue();
+                        transformer.crearParada(origen);
+                    }
                 }
                 cant_celdas++;
             }

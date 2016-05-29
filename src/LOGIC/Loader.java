@@ -36,15 +36,16 @@ public class Loader {
         return dbmanager.selectQuery(sql);   
     }
 
-    public int consultarTiempo(String hora) {
+    public int consultarTiempo(String franja) {
         String sql;
-        sql = "SELECT id_tiempo FROM tiempo WHERE hora_origen = '" + hora + "'";
+        sql = "SELECT id_tiempo FROM tiempo WHERE franja = '" + franja + "'";
+        System.out.println(sql);
         return dbmanager.selectQuery(sql);   
     }
 
     public int consultarParada(String parada) {
         String sql;
-        sql = "SELECT id_parada FROM parada WHERE nombre_parada = '" + parada + "'";
+        sql = "SELECT id_parada FROM parada WHERE nombre = '" + parada + "'";
         return dbmanager.selectQuery(sql);   
     }
 
@@ -58,25 +59,24 @@ public class Loader {
         }
     }
 
-    public void cargarParada(Parada parada) {
+    public int cargarParada(Parada parada) {
         String sql;
-        sql = "INSERT INTO paradas VALUES ('"
-                + parada.getIdParada() + "', '" + parada.getNombre() + "', '"
-                + parada.getTipo() + ")";
+        sql = "INSERT INTO parada (id, nombre, tipo) VALUES ('"
+                + parada.getId() + "', '" + parada.getNombre() + "', '"
+                + parada.getTipo() + "')";
 
-        dbmanager.insertQuery(sql);
+        return dbmanager.insertQuery(sql);
     }
 
-    void cargarDemanda(Demanda demanda) {
+    public int cargarDemanda(Demanda demanda) {
 
         String sql;
-        sql = "INSERT INTO demanda VALUES ('"
-                + demanda.getFechaKey() + "', '" + demanda.getTiempoKey() + "', '"
-                + "', '" + demanda.getOrigenKey() + "', '"
-                + "', '" + demanda.getDestinoKey() + "', '"
-                + demanda.getCantPasajeros() + ")";
+        sql = "INSERT INTO demanda (id_fecha, id_franja, id_origen, id_destino, cantidad_pasajeros) VALUES ("
+                + demanda.getId_fecha() + ", " + demanda.getId_franja() + ", " 
+                + demanda.getId_origen() + ", " + demanda.getId_destino() + ", "
+                + demanda.getCantidad_pasajeros() + ")";
 
-        dbmanager.insertQuery(sql);
+        return dbmanager.insertQuery(sql);
 
     }
 

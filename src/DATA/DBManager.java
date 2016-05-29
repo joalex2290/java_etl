@@ -75,8 +75,8 @@ public class DBManager {
     }
 
     public int insertQuery(String sql) {
+        int resultado = 0;
         try {
-            int resultado;
             Statement sentencia = conexion.createStatement();
             resultado = sentencia.executeUpdate(sql);
             return resultado;
@@ -85,10 +85,28 @@ public class DBManager {
         } catch (Exception e) {
             System.out.println(e);
         }
-        return 0;
+        
+        return resultado;
     }
 
     public int selectQuery(String sql) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        int resultado = -1;
+        try {
+            
+            Statement sentencia = conexion.createStatement();
+            ResultSet res=sentencia.executeQuery(sql);
+            
+            while(res.next()){
+                resultado = res.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        
+        return resultado;
+        
     }
 }

@@ -11,24 +11,24 @@ package DATA;
  */
 public class Parada {
 
-    private int IdParada;
+    private String Id;
     private String Nombre;
     private String Tipo;
 
-    public Parada(int IdParada, String Nombre, String Tipo) {
+    public Parada(String Id, String Nombre, String Tipo) {
 
-        this.IdParada = IdParada;
+        this.Id = Id;
         this.Nombre = Nombre;
         this.Tipo = Tipo;
 
     }
 
-    public int getIdParada() {
-        return IdParada;
+    public String getId() {
+        return Id;
     }
 
-    public void setIdParada(int IdParada) {
-        this.IdParada = IdParada;
+    public void setId(String Id) {
+        this.Id = Id;
     }
 
     public String getNombre() {
