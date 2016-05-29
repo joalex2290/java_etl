@@ -5,6 +5,7 @@
  */
 package DATA;
 
+import java.awt.List;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -46,8 +47,8 @@ public class DBManager {
             System.out.println("No se pudo conectar con la bd.");
         }
     }
-
-    public Connection getConexion() {
+    
+    public Connection getConexion(){
         return this.conexion;
     }
 
@@ -86,14 +87,16 @@ public class DBManager {
         return 0;
     }
 
-    public ResultSet selectQuery(String sql) {
+    public int selectIdQuery(String idColumna,String sql) {
+        int id = 0;
         try {
             Statement sentencia = conexion.createStatement();
-            ResultSet resultado = sentencia.executeQuery(sql);
-            return resultado;
+            ResultSet res = sentencia.executeQuery(sql);
+            while(res.next()){
+                id = res.getInt(idColumna);
+            }
         } catch (SQLException e) {
             System.out.println(e);
         }
-        return null;
-    }
+        return id;}
 }

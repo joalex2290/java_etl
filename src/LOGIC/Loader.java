@@ -35,38 +35,26 @@ public class Loader {
 
     public int consultarFecha(String fecha) {
         String sql;
+        int id = 0;
         sql = "SELECT id_fecha FROM fecha WHERE fecha_formateada = '" + fecha + "'";
-        ResultSet res = dbmanager.selectQuery(sql);
-        try {   
-            return res.getInt("id_fecha");
-        } catch (SQLException ex) {
-            Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return 0;
+        id = dbmanager.selectIdQuery("id_fecha",sql);
+        return id;
     }
 
     public int consultarTiempo(String hora) {
         String sql;
+        int id = 0;
         sql = "SELECT id_tiempo FROM tiempo WHERE franja = '" + hora + "'";
-        ResultSet res = dbmanager.selectQuery(sql);
-        try {   
-            return res.getInt("id_tiempo");
-        } catch (SQLException ex) {
-            Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return 0;
+        id = dbmanager.selectIdQuery("id_tiempo",sql);
+        return id;
     }
 
     public int consultarParada(String parada) {
         String sql;
+        int id = 0;
         sql = "SELECT id_parada FROM parada WHERE nombre = '" + parada + "'";
-        ResultSet res = dbmanager.selectQuery(sql);
-        try {   
-            return res.getInt("id_parada");
-        } catch (SQLException ex) {
-            Logger.getLogger(Loader.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return 0;   
+        id = dbmanager.selectIdQuery("id_parada",sql);
+        return id;
     }
 
     public void cargarTiempoFecha() throws SQLException, FileNotFoundException, IOException {
@@ -81,8 +69,8 @@ public class Loader {
 
     public void cargarParada(Parada parada) {
         String sql;
-        sql = "INSERT INTO parada (id,nombre,tipo) VALUES ('" + parada.getIdParada() + 
-                "','" + parada.getNombre() + "','" + parada.getTipo() + "');";
+        sql = "INSERT INTO parada (id,nombre,tipo) VALUES ('" + parada.getIdParada()
+                + "','" + parada.getNombre() + "','" + parada.getTipo() + "');";
 
         dbmanager.insertQuery(sql);
     }
@@ -90,9 +78,9 @@ public class Loader {
     void cargarDemanda(Demanda demanda) {
 
         String sql;
-        sql = "INSERT INTO demanda (id_fecha,id_tiempo,id_origen,id_destino,cantidad_pasajeros) VALUES (" +
-                demanda.getFechaKey() + "," + demanda.getTiempoKey() + "," + demanda.getOrigenKey() + 
-                "," + demanda.getDestinoKey() + "," + demanda.getCantPasajeros() + ");";
+        sql = "INSERT INTO demanda (id_fecha,id_tiempo,id_origen,id_destino,cantidad_pasajeros) VALUES ("
+                + demanda.getFechaKey() + "," + demanda.getTiempoKey() + "," + demanda.getOrigenKey()
+                + "," + demanda.getDestinoKey() + "," + demanda.getCantPasajeros() + ");";
         dbmanager.insertQuery(sql);
     }
 }

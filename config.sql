@@ -123,7 +123,7 @@ CREATE TABLE parada (
 CREATE TABLE demanda (
 	id_demanda SERIAL PRIMARY KEY,
 	id_fecha INTEGER REFERENCES fecha(id_fecha),
-	id_franja INTEGER REFERENCES tiempo(id_tiempo),
+	id_tiempo INTEGER REFERENCES tiempo(id_tiempo),
 	id_origen INTEGER REFERENCES parada(id_parada),
 	id_destino INTEGER REFERENCES parada(id_parada),
 	cantidad_pasajeros INTEGER		

@@ -186,7 +186,9 @@ public class Extractor {
                     //System.out.println("Demanda " + cell.getNumericCellValue());
                     destino = nombreRutas.get(cant_celdas);
                     double valorCapturado = cell.getNumericCellValue();
-                    transformer.crearDemanda(bookName,sheetName,origen, destino, valorCapturado);
+                    String[] nombreHoja = sheetName.split(" ",-1);
+                    log.append(nombreHoja[1]);
+                    transformer.crearDemanda(bookName,nombreHoja[1],origen, destino, valorCapturado);
                 }
                 else if(cell.getCellType()==Cell.CELL_TYPE_STRING)
                 {
