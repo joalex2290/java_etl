@@ -34,7 +34,7 @@ public class Transformer {
     void crearDemanda(String fecha, String hora, String origen, String destino, double cantidadPasajeros) {
         //SELECT key FROM fecha WHERE dia=fecha.substring(0, 2) and mes=fecha.substring(2,4) ano=fecha.substring(4,6)
 
-        int fechaKey = loader.consultarFecha(fecha);
+        int fechaKey = loader.consultarFecha("140114");
         int tiempoKey = loader.consultarTiempo(hora);
         int origenKey = loader.consultarParada(origen);
         int destinoKey = loader.consultarParada(destino);
