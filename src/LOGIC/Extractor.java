@@ -1,0 +1,201 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package LOGIC;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.Iterator;
+import javax.swing.JTextArea;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+;
+/**
+ *
+ * @author John A. Munoz
+ */
+public class Extractor {
+    
+    private ArrayList<XSSFWorkbook> books;
+    private Transformer transformer;
+    private JTextArea log;
+    
+    //folderPath indica la ruta del archivo o directorio que se ha seleccionado
+    //isFolder indica true si el parametro folderPath es un folder, false si es un archivo de excel
+    public Extractor(String folderPath, boolean isFolder, JTextArea log)
+    {
+        System.out.println("Crear lector");
+        this.transformer = new Transformer(log);
+        this.books = new ArrayList();
+        this.log = log;
+        
+        if(isFolder)
+        {
+            getFiles(folderPath);
+        }
+        else
+        {
+            try
+            {
+                FileInputStream excelFile = new FileInputStream(new File(folderPath));
+                XSSFWorkbook book = new XSSFWorkbook(excelFile);
+                System.out.println("archivo desde file " + folderPath);
+                book.getProperties().getCoreProperties().setTitle(folderPath);
+                this.books.add(book);
+            }
+            catch(Exception e)
+            {
+                System.out.println("Exception " + e.getMessage());
+            }
+        }
+    }
+    
+        //Lee todos los archivos excel que ha seleccionado el usuario
+    public void readBooks()
+    {
+        System.out.println(" cantidad de libros" + books.size());
+        for (int i=0;i<books.size();i++)
+        {
+            readBook(books.get(i));
+        }
+    }
+    
+    private void getFiles(String folderPath)
+    {
+        try
+        {            
+            File folder = new File(folderPath);
+            
+            //Create filter to read just excel files
+            FilenameFilter fileNameFilter = new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String name) {
+                    if(name.lastIndexOf('.')>0)
+                    {
+                        //get last index for '.' char
+                        int lastIndex = name.lastIndexOf('.');
+                        // get extension
+                        String str = name.substring(lastIndex);
+
+                        // match path name extension
+                        if(str.equals(".xlsx"))
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            };
+            
+            File[] files = folder.listFiles(fileNameFilter);
+
+            for(int i=0;i<files.length;i++)
+            {
+                FileInputStream excelFile = new FileInputStream(files[i]);
+                XSSFWorkbook book = new XSSFWorkbook(excelFile);
+                System.out.println("archivo desde file " + (i+1) + " " + files[i].getName());
+                book.getProperties().getCoreProperties().setTitle(files[i].getName());
+                this.books.add(book);                
+            }
+            
+            System.out.println("FIn leer archivos");
+        }
+        catch(Exception e)
+        {
+            System.out.println("Exception " + e.getMessage());
+        }
+    }
+    
+    /*
+    Lee todas las hojas de un libro excel.
+    Recorre hoja por hoja.
+    */
+    private void readBook(XSSFWorkbook book){
+        System.out.println("Leer libro");
+        String bookName = book.getProperties().getCoreProperties().getTitle();
+        
+        //int numberSheets = book.getNumberOfSheets();
+        //Procesar cada una de las hojas del libro
+        for (int i=0; i<book.getNumberOfSheets(); i++)
+        {
+            
+            //Obtener la hoja actual
+            XSSFSheet sheet = book.getSheetAt(i);
+            
+            //Obtener el nombre de la hoja actual
+            readSheet(sheet, bookName);
+            
+            
+        }
+        System.out.println("Fin de Leer libro");
+    }
+    
+    /*
+    Recorre cada celda para obtener los valores del libro.
+    Recorre cada fila, y luego cada celda de la fila.
+    */
+    private void readSheet(XSSFSheet sheet, String bookName)
+    {
+        System.out.println("Leer hoja");
+        
+        String origen = "";
+        String destino = "";
+        String sheetName = sheet.getSheetName();
+        
+        ArrayList<String> nombreRutas = new ArrayList();
+        
+        Iterator<Row> rowIterator = sheet.iterator();
+        
+        //Leer la primera fila de la hoja para obtener los encabezados de las celdas.
+        //Obtener los nombres de las rutas
+        
+        Row firstRow = rowIterator.next();
+        Iterator<Cell> cellIterator = firstRow.cellIterator();
+        Cell cell;
+        
+        //Recorrer todas las celdas a partir de la numero 2.
+        cellIterator.next();
+        while(cellIterator.hasNext())
+        {
+            cell = cellIterator.next();
+            String nombreRuta = cell.getStringCellValue();
+            //transformer.crearParada(nombreRuta);
+            nombreRutas.add(cell.getStringCellValue());
+        }
+        
+        //Recorrer todas las filas de la hoja, a partir de la segunda fila
+        Row row;
+        while (rowIterator.hasNext())
+        {
+            row = rowIterator.next();
+            cellIterator = row.cellIterator();
+            int cant_celdas = 0;
+            while(cellIterator.hasNext())
+            {
+                
+                //System.out.println("Celda #" +cant_celdas);
+                cell = cellIterator.next();
+                if(cell.getCellType()==Cell.CELL_TYPE_NUMERIC)
+                {
+                    //System.out.println("Demanda " + cell.getNumericCellValue());
+                    destino = nombreRutas.get(cant_celdas);
+                    double valorCapturado = cell.getNumericCellValue();
+                    //transformer.crearDemanda(bookName,sheetName,origen, destino, valorCapturado);
+                }
+                else if(cell.getCellType()==Cell.CELL_TYPE_STRING)
+                {
+                    //System.out.println("Destino " + cell.getStringCellValue());
+                    if(cant_celdas==0) origen = cell.getStringCellValue();
+                }
+                cant_celdas++;
+            }
+        }
+    }
+    
+}
