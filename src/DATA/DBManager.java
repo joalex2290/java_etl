@@ -40,7 +40,7 @@ public class DBManager {
         try {
             //Crear el objeto de conexion a la base de datos
             conexion = DriverManager.getConnection(url, usuario, password);
-            System.out.println("Conexion establecida con la bd.");
+            //System.out.println("Conexion establecida con la bd.");
             //Crear objeto Statement para realizar queries a la base de datos
         } catch (Exception e) {
             System.out.println("No se pudo conectar con la bd.");

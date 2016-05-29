@@ -45,7 +45,6 @@ public class Transformer {
         int id_fecha = loader.consultarFecha(fecha_str);
         
         //Consultar surrogate key de la franja horaria
-        System.out.println("hora "+hora);
         String franja = hora.split(" ")[1];
         int id_franja = loader.consultarTiempo(franja);
         
@@ -58,9 +57,7 @@ public class Transformer {
 
         Demanda nuevaDemanda = new Demanda(id_fecha, id_franja, id_origen, id_destino, cantidadPasajerosInt);
 
-        int cargado = loader.cargarDemanda(nuevaDemanda);
-        System.out.println("cargar demanda" + cargado);
- 
+        int cargado = loader.cargarDemanda(nuevaDemanda); 
     }
 
     void crearParada(String nombreParada) {

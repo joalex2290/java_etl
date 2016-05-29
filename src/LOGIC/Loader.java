@@ -39,7 +39,6 @@ public class Loader {
     public int consultarTiempo(String franja) {
         String sql;
         sql = "SELECT id_tiempo FROM tiempo WHERE franja = '" + franja + "'";
-        System.out.println(sql);
         return dbmanager.selectQuery(sql);   
     }
 
