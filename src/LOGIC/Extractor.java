@@ -44,7 +44,8 @@ public class Extractor {
                 File excelFile = new File(folderPath);
                 XSSFWorkbook book = new XSSFWorkbook(excelFile);
                 book.getProperties().getCoreProperties().setTitle(excelFile.getName());
-                this.books.add(book);
+                readBook(book);
+                //this.books.add(book);
             }
             catch(Exception e)
             {
@@ -90,12 +91,16 @@ public class Extractor {
             };
             
             File[] files = folder.listFiles(fileNameFilter);
-
+            
+            XSSFWorkbook book;
+            
             for(int i=0;i<files.length;i++)
             {
-                XSSFWorkbook book = new XSSFWorkbook(files[i]);
+                book = new XSSFWorkbook(files[i]);
+                System.out.println("Leyendo" + files[i].getName());
                 book.getProperties().getCoreProperties().setTitle(files[i].getName());
-                this.books.add(book);                
+                readBook(book);
+                //this.books.add(book);
             }
         }
         catch(Exception e)

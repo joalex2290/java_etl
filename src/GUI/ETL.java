@@ -83,7 +83,7 @@ public class ETL extends JPanel
             if(file.getName().contains(".xlsx")) isFolder = false;
             
             LOGIC.Extractor lector = new LOGIC.Extractor (folderPath,isFolder,log);
-            lector.readBooks();
+            //lector.readBooks();
         }
     }
 

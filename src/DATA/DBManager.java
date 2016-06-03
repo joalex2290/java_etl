@@ -81,9 +81,9 @@ public class DBManager {
             resultado = sentencia.executeUpdate(sql);
             return resultado;
         } catch (SQLException e) {
-            System.out.println(e);
+            //System.out.println(e);
         } catch (Exception e) {
-            System.out.println(e);
+            //System.out.println(e);
         }
         
         return resultado;
